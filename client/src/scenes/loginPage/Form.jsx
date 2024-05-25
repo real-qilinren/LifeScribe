@@ -65,11 +65,6 @@ const Form = () => {
         }
         formData.append('picturePath', values.picture.name);
 
-        console.log("Registering user, front end");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
         const savedUserResponse = await fetch("http://localhost:3001/auth/register", {
             method: "POST",
             body: formData,
