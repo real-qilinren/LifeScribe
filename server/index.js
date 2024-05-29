@@ -70,7 +70,7 @@ mongoose
         // User.insertMany(users)
         //     .then(() => console.log("Users inserted successfully"))
         //     .catch((error) => console.log("Error inserting users:", error.message));
-
+        //
         // Post.insertMany(posts)
         //     .then(() => console.log("Posts inserted successfully"))
         //     .catch((error) => console.log("Error inserting posts:", error.message));
