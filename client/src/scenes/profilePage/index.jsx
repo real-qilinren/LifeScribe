@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Navbar from '../navbar';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import FriendListWidget from "../widgets/FriendListWidget";
+import FriendList from "../../components/FriendList";
 import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
@@ -48,13 +48,11 @@ const ProfilePage = () => {
                 <Box flexBasis={isNonMobile ? "26%" : undefined}>
                     <UserWidget userId={userId} picturePath={user.picturePath} />
                     <Box m="2rem 0" />
-                    <FriendListWidget userId={userId} />
                 </Box>
                 <Box
                     flexBasis={isNonMobile ? "42%" : undefined}
                     mt={isNonMobile ? undefined : "2rem"}
                 >
-                    <MyPostWidget picturePath={user.picturePath} />
                     <Box m="2rem 0" />
                     <PostsWidget userId={userId} isProfile />
                 </Box>

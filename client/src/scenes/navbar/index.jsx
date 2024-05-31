@@ -1,14 +1,14 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
     Box,
     IconButton,
     Typography,
     InputBase,
-    Select,
     MenuItem,
     FormControl,
     useTheme,
     useMediaQuery,
+    Menu
 } from "@mui/material";
 import {
     Search,
@@ -17,17 +17,18 @@ import {
     LightMode,
     Notifications,
     Help,
-    Menu,
+    Menu as MenuIcon,
     Close
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import {setMode, setLogout} from "../../state";
-import { useNavigate} from "react-router-dom";
+import { setMode, setLogout } from "../../state";
+import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
-
+import UserImage from "../../components/UserImage";
 
 const Navbar = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
@@ -39,8 +40,14 @@ const Navbar = () => {
     const background = theme.palette.background.default;
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
+    
+    const handleAvatarClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-    const fullName = user ? `${user.firstName} ${user.lastName}` : "TestUser";
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -60,9 +67,7 @@ const Navbar = () => {
                 </Typography>
                 {isNonMobile && (
                     <FlexBetween backgroundColor={neutralLight} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-                        <InputBase
-                            placeholder="Search..."
-                        />
+                        <InputBase placeholder="Search..." />
                         <IconButton>
                             <Search />
                         </IconButton>
@@ -73,50 +78,36 @@ const Navbar = () => {
             {/* Desktop Navbar */}
             {isNonMobile ? (
                 <FlexBetween gap={"2rem"}>
-                 <IconButton onClick={() => dispatch(setMode())}>
+                    <IconButton onClick={() => dispatch(setMode())}>
                         {theme.palette.mode === "dark" ? (
-                            <DarkMode sx={{ fontSize: "25px"}} />
-                        ): (
-                            <LightMode sx={{ color: dark, fontSize: "25px"}} />
+                            <DarkMode sx={{ fontSize: "25px" }} />
+                        ) : (
+                            <LightMode sx={{ color: dark, fontSize: "25px" }} />
                         )}
                     </IconButton>
-                    <Message sx={ {fontSize:"25px"}} ></Message>
-                    <Notifications sx={{fontSize: "25px"}}></Notifications>
-                    <Help sx={{fontSize: "25px"}}></Help>
-                    <FormControl variant={"standard"} value={fullName}>
-                        <Select
-                            value={fullName}
-                            sx={{
-                                backgroundColor:neutralLight,
-                                width:"150px",
-                                borderRadius:"0.25rem",
-                                p:"0.25rem 1rem",
-                                "& .MuiSvgIcon-root": {
-                                    pr:"0.25rem",
-                                    width:"3rem",
-                                },
-                                "& .MuiSelect-select:focus": {
-                                    backgroundColor: neutralLight,
-                                }
-                            }}
-                            input={<InputBase />}>
-                            <MenuItem value={fullName}>
-                                <Typography>{fullName}</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={() => dispatch(setLogout())}>
-                                Log out
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
+                    <Message sx={{ fontSize: "25px" }} />
+                    <Notifications sx={{ fontSize: "25px" }} />
+                    <Help sx={{ fontSize: "25px" }} />
+                    <IconButton onClick={handleAvatarClick}>
+                        <UserImage image={user?.picturePath || ""} size="40px" />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={() => dispatch(setLogout())}>
+                            Log out
+                        </MenuItem>
+                    </Menu>
                 </FlexBetween>
             ) : (
-                <iconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
-                    <Menu/>
-                </iconButton>
+                <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+                    <MenuIcon />
+                </IconButton>
             )}
 
             {/* Mobile Navbar */}
-            {/* MOBILE NAV */}
             {!isNonMobile && isMobileMenuToggled && (
                 <Box
                     position="fixed"
@@ -130,9 +121,7 @@ const Navbar = () => {
                 >
                     {/* CLOSE ICON */}
                     <Box display="flex" justifyContent="flex-end" p="1rem">
-                        <IconButton
-                            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-                        >
+                        <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
                             <Close />
                         </IconButton>
                     </Box>
@@ -145,10 +134,7 @@ const Navbar = () => {
                         alignItems="center"
                         gap="3rem"
                     >
-                        <IconButton
-                            onClick={() => dispatch(setMode())}
-                            sx={{ fontSize: "25px" }}
-                        >
+                        <IconButton onClick={() => dispatch(setMode())} sx={{ fontSize: "25px" }}>
                             {theme.palette.mode === "dark" ? (
                                 <DarkMode sx={{ fontSize: "25px" }} />
                             ) : (
@@ -158,32 +144,18 @@ const Navbar = () => {
                         <Message sx={{ fontSize: "25px" }} />
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
-                        <FormControl variant="standard" value={fullName}>
-                            <Select
-                                value={fullName}
-                                sx={{
-                                    backgroundColor: neutralLight,
-                                    width: "150px",
-                                    borderRadius: "0.25rem",
-                                    p: "0.25rem 1rem",
-                                    "& .MuiSvgIcon-root": {
-                                        pr: "0.25rem",
-                                        width: "3rem",
-                                    },
-                                    "& .MuiSelect-select:focus": {
-                                        backgroundColor: neutralLight,
-                                    },
-                                }}
-                                input={<InputBase />}
-                            >
-                                <MenuItem value={fullName}>
-                                    <Typography>{fullName}</Typography>
-                                </MenuItem>
-                                <MenuItem onClick={() => dispatch(setLogout())}>
-                                    Log Out
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
+                        <IconButton onClick={handleAvatarClick}>
+                            <UserImage image={user?.picturePath || ""} size="40px" />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            <MenuItem onClick={() => dispatch(setLogout())}>
+                                Log out
+                            </MenuItem>
+                        </Menu>
                     </FlexBetween>
                 </Box>
             )}

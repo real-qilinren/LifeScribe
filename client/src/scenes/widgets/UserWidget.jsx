@@ -3,17 +3,21 @@ import {
     EditOutlined,
     LocationOnOutlined,
     WorkOutlineOutlined,
+    ExpandLess,
+    ExpandMore
 } from "@mui/icons-material";
-import {Box, Typography, Divider, useTheme } from "@mui/material";
+import {Box, Typography, Divider, useTheme, Collapse} from "@mui/material";
 import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import FriendList from "../../components/FriendList";
 
 const UserWidget = ({ userId, picturePath }) => {
     const [user, setUser] = useState(null);
+    const [isFriendsListOpen, setIsFriendsListOpen] = useState(false);
     const { palette } = useTheme();
     const navigate = useNavigate();
     const token = useSelector((state) => state.token);
@@ -64,7 +68,7 @@ const UserWidget = ({ userId, picturePath }) => {
                             fontWeight="500"
                             sx={{
                                 "&:hover": {
-                                    color: palette.primary.light,
+                                    color: medium,
                                     cursor: "pointer",
                                 },
                             }}
@@ -96,13 +100,13 @@ const UserWidget = ({ userId, picturePath }) => {
             {/* THIRD ROW */}
             <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
-                    <Typography color={medium}>Who's viewed your profile</Typography>
+                    <Typography color={medium}>Views of profile</Typography>
                     <Typography color={main} fontWeight="500">
                         {viewedProfile}
                     </Typography>
                 </FlexBetween>
                 <FlexBetween>
-                    <Typography color={medium}>Impressions of your post</Typography>
+                    <Typography color={medium}>Likes of your post</Typography>
                     <Typography color={main} fontWeight="500">
                         {impressions}
                     </Typography>
@@ -130,7 +134,7 @@ const UserWidget = ({ userId, picturePath }) => {
                     <EditOutlined sx={{ color: main }} />
                 </FlexBetween>
 
-                <FlexBetween gap="1rem">
+                <FlexBetween gap="1rem" mb="0.5rem">
                     <FlexBetween gap="1rem">
                         <img src="/assets/linkedin.png" alt="linkedin" />
                         <Box>
@@ -142,6 +146,27 @@ const UserWidget = ({ userId, picturePath }) => {
                     </FlexBetween>
                     <EditOutlined sx={{ color: main }} />
                 </FlexBetween>
+
+                <Divider />
+
+                {/* Friends List */}
+                <Box p="1rem 0" >
+                    <FlexBetween
+                        onClick={() => setIsFriendsListOpen(!isFriendsListOpen)}
+                        sx={{ cursor: "pointer" }}
+                    >
+                        <Typography fontSize="1rem" color={main} fontWeight="500">
+                            Friends List
+                        </Typography>
+                        {isFriendsListOpen ? <ExpandLess /> : <ExpandMore />}
+                    </FlexBetween>
+                    <Collapse in={isFriendsListOpen}>
+                        <Box mt="1rem">
+                            <FriendList userId={userId} />
+                        </Box>
+                    </Collapse>
+                </Box>
+
             </Box>
         </WidgetWrapper>
     );

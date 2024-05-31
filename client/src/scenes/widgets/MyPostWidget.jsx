@@ -23,10 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import Dropzone from "react-dropzone";
-import { setPosts } from "../../state";
 
 const MyPostWidget = ({ picturePath }) => {
-    const dispatch = useDispatch();
     const [ isClickImage, setClickImage ] = useState(false);
     const [ image, setImage ] = useState(null);
     const [ post , setPost ] = useState("");
@@ -57,7 +55,6 @@ const MyPostWidget = ({ picturePath }) => {
 
             if (response.status === 201) {
                 const posts = await response.json();
-                dispatch(setPosts(posts));
                 setPost("");
                 setImage(null);
             }
@@ -65,7 +62,6 @@ const MyPostWidget = ({ picturePath }) => {
             console.log(error);
         }
     }
-
 
     return (
         <WidgetWrapper>
@@ -122,11 +118,11 @@ const MyPostWidget = ({ picturePath }) => {
                                 )}
                             </Box>
                                 {image && (
-                                    <iconButton
+                                    <IconButton
                                         onClick={() => setImage(null)}
                                         sx={{ width:"25%"}}>
                                         <DeleteOutlined />
-                                    </iconButton>
+                                    </IconButton>
                                 )}
                             </FlexBetween>
                         )}
