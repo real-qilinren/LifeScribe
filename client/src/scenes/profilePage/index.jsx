@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux';
 import Navbar from '../navbar';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import FriendList from "../../components/FriendList";
-import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
 

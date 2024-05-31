@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    deletePost,
     getFeedPosts,
     getUserPosts,
     likePost,
@@ -14,5 +15,6 @@ router.get("/:id/posts", verifyToken, getUserPosts);
 
 /* UPDATE */
 router.patch("/:id/like", verifyToken, likePost);
+router.delete("/:id/delete", verifyToken, deletePost);
 
 export default router;

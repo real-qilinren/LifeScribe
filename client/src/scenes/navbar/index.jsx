@@ -5,7 +5,6 @@ import {
     Typography,
     InputBase,
     MenuItem,
-    FormControl,
     useTheme,
     useMediaQuery,
     Menu
@@ -40,9 +39,13 @@ const Navbar = () => {
     const background = theme.palette.background.default;
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
-    
+
     const handleAvatarClick = (event) => {
-        setAnchorEl(event.currentTarget);
+        if (anchorEl) {
+            handleMenuClose();
+        } else {
+            setAnchorEl(event.currentTarget);
+        }
     };
 
     const handleMenuClose = () => {
@@ -102,9 +105,24 @@ const Navbar = () => {
                     </Menu>
                 </FlexBetween>
             ) : (
-                <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
-                    <MenuIcon />
-                </IconButton>
+                <FlexBetween>
+                    <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
+                        <MenuIcon />
+                    </IconButton>
+
+                    <IconButton onClick={handleAvatarClick}>
+                        <UserImage image={user?.picturePath || ""} size="40px" />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={() => dispatch(setLogout())}>
+                            Log out
+                        </MenuItem>
+                    </Menu>
+                </FlexBetween>
             )}
 
             {/* Mobile Navbar */}
@@ -144,18 +162,6 @@ const Navbar = () => {
                         <Message sx={{ fontSize: "25px" }} />
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
-                        <IconButton onClick={handleAvatarClick}>
-                            <UserImage image={user?.picturePath || ""} size="40px" />
-                        </IconButton>
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                        >
-                            <MenuItem onClick={() => dispatch(setLogout())}>
-                                Log out
-                            </MenuItem>
-                        </Menu>
                     </FlexBetween>
                 </Box>
             )}

@@ -20,8 +20,8 @@ export const createPost = async (req, res) => {
 
         await newPost.save();
 
-        const post = await Post.find();
-        res.status(201).json(post);
+        const posts = await Post.find().sort({createdAt: -1});
+        res.status(201).json(posts);
     } catch (error) {
         res.status(409).json({message: error.message});
     }
@@ -30,7 +30,7 @@ export const createPost = async (req, res) => {
 /* READ */
 export const getFeedPosts = async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().sort({createdAt: -1});
         res.status(200).json(posts);
     } catch (error) {
         res.status(404).json({message: error.message});
@@ -39,7 +39,7 @@ export const getFeedPosts = async (req, res) => {
 
 export const getUserPosts = async (req, res) => {
     try {
-        const posts = await Post.find({userId: req.params.id});
+        const posts = await Post.find({userId: req.params.id}).sort({createdAt: -1});
         res.status(200).json(posts);
     } catch (error) {
         res.status(404).json({message: error.message});
@@ -60,8 +60,6 @@ export const likePost = async (req, res) => {
             post.likes.set(userId, true);
         }
 
-        // await post.save();
-
         const updatedPost = await Post.findByIdAndUpdate (
             id,
             {likes: post.likes},
@@ -69,6 +67,18 @@ export const likePost = async (req, res) => {
         )
 
         res.status(200).json(updatedPost);
+    } catch (error) {
+        res.status(404).json({message: error.message});
+    }
+}
+
+/* DELETE */
+export const deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Post.findByIdAndDelete(id);
+        const posts = await Post.find().sort({createdAt: -1});
+        res.status(200).json(posts);
     } catch (error) {
         res.status(404).json({message: error.message});
     }
