@@ -13,10 +13,14 @@ import { register } from './controllers/auth.js';
 import {verifyToken} from "./middleware/auth.js";
 import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
+import chatRoutes from './routes/chats.js';
+import messageRoutes from './routes/messages.js';
 import {createPost} from "./controllers/posts.js";
 import User from './models/User.js';
 import Post from './models/Post.js';
 import {users, posts} from './data/index.js';
+import {configureSocket} from "./middleware/socket.js";
+import {sendMessage} from "./controllers/messages.js";
 
 /* CONFIG */
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +56,8 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
+app.use('/chats', chatRoutes);
+app.use('/messages', messageRoutes);
 
 /* MONGODB CONNECTION */
 const PORT = process.env.PORT || 5000;
@@ -61,9 +67,11 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => {
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`Server is running on port: ${PORT}`);
         });
+
+        configureSocket(server);
 
         /* Ensure that these operations are asynchronous and only run once */
 
