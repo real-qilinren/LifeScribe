@@ -8,7 +8,8 @@ const initialState = {
     chatFriendId: null,
     chatFriendName: "",
     chatFriendPicturePath: "",
-    chatId: null
+    chatId: null,
+    messages: []
 };
 
 export const authSlice = createSlice({
@@ -44,6 +45,9 @@ export const authSlice = createSlice({
         setPosts: (state, action) => {
             state.posts = action.payload.posts;
         },
+        setMessages: (state, action) => {
+            state.messages = action.payload.messages;
+        },
         setPost: (state, action) => {
             state.posts = state.posts.map((post) => {
                 if (post._id === action.payload.post._id) {
@@ -55,6 +59,6 @@ export const authSlice = createSlice({
     }
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setChatFriendInfo, setChatId, setPosts, setPost } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setChatFriendInfo, setChatId, setPosts, setMessages, setPost } = authSlice.actions;
 
 export default authSlice.reducer;

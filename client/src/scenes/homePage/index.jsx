@@ -11,7 +11,6 @@ import ChatWidget from "../widgets/ChatWidget";
 const HomePage = () => {
     const isNonMobile = useMediaQuery("(min-width:1000px)");
     const { _id, picturePath } = useSelector((state) => state.user);
-    console.log(_id);
 
     return (
         <Box>
@@ -39,7 +38,7 @@ const HomePage = () => {
                         <Box m="2rem 0" />
                     </Box>
                 )}
-                <ChatWidget />
+                {/*<ChatWidget />*/}
             </Box>
         </Box>
     );
