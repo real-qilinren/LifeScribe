@@ -5,10 +5,11 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Navbar from '../navbar';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
+import ChatWidget from "../widgets/ChatWidget";
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -54,6 +55,7 @@ const ProfilePage = () => {
                     <Box m="2rem 0" />
                     <PostsWidget userId={userId} isProfile />
                 </Box>
+                {/*<ChatWidget />*/}
             </Box>
         </Box>
     );

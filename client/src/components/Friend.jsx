@@ -46,14 +46,16 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
         });
 
         const chat = await response.json();
-        console.log("Chat created", chat);
         dispatch(setChatId({ chatId: chat._id }));
     };
 
-    const handleChatClick = () => {
+    const handleChatClick = async () => {
         createChat();
-        dispatch(setChatFriendInfo({ chatFriendId: friendId, chatFriendName: name, chatFriendPicturePath: userPicturePath }));
-        console.log("Chatting with", friendId);
+        dispatch(setChatFriendInfo({
+            chatFriendId: friendId,
+            chatFriendName: name,
+            chatFriendPicturePath: userPicturePath
+        }));
     };
 
     return (
