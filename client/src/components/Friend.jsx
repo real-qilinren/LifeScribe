@@ -1,12 +1,12 @@
-import { PersonAddOutlined, PersonRemoveOutlined} from "@mui/icons-material";
+import { Chat as ChatIcon, PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { useDispatch, useSelector} from "react-redux";
-import state, { setFriends } from "../state";
+import { useDispatch, useSelector } from "react-redux";
+import {setChatFriendInfo, setChatId, setFriends} from "../state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = useSelector(state => state.token);
@@ -35,6 +35,26 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         dispatch(setFriends({ friends: data }));
     };
 
+    const createChat = async () => {
+        const response = await fetch(`http://localhost:3001/chats/chat`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ user1Id: _id, user2Id: friendId })
+        });
+
+        const chat = await response.json();
+        console.log("Chat created", chat);
+        dispatch(setChatId({ chatId: chat._id }));
+    };
+
+    const handleChatClick = () => {
+        createChat();
+        dispatch(setChatFriendInfo({ chatFriendId: friendId, chatFriendName: name, chatFriendPicturePath: userPicturePath }));
+        console.log("Chatting with", friendId);
+    };
 
     return (
         <FlexBetween>
@@ -64,16 +84,33 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     </Typography>
                 </Box>
             </FlexBetween>
-            <IconButton
-                onClick={patchFriend}
-                sx={{
-                    backgroundColor: primaryLight,
-                    p: "0.6rem",
-                }}>
-                {isFriend ? <PersonRemoveOutlined sx={{color: primaryDark}} /> : <PersonAddOutlined sx={{color: primaryDark}} />}
-            </IconButton>
+
+            {friendId !== _id && !isProfile && (
+                <FlexBetween gap="0.5rem">
+                    <IconButton
+                        onClick={handleChatClick}
+                        sx={{
+                            backgroundColor: primaryLight,
+                            p: "0.6rem",
+                        }}
+                    >
+                        <ChatIcon sx={{ color: primaryDark }} />
+                    </IconButton>
+
+                    {!isProfile && (
+                        <IconButton
+                            onClick={patchFriend}
+                            sx={{
+                                backgroundColor: primaryLight,
+                                p: "0.6rem",
+                            }}>
+                            {isFriend ? <PersonRemoveOutlined sx={{ color: primaryDark }} /> : <PersonAddOutlined sx={{ color: primaryDark }} />}
+                        </IconButton>
+                    )}
+                </FlexBetween>
+            )}
         </FlexBetween>
-    )
+    );
 }
 
 export default Friend;

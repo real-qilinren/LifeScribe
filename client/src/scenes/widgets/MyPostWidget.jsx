@@ -19,18 +19,18 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import Dropzone from "react-dropzone";
-import { setPosts } from "../../state";
+import {setPosts} from "../../state";
 
 const MyPostWidget = ({ picturePath }) => {
-    const dispatch = useDispatch();
     const [ isClickImage, setClickImage ] = useState(false);
     const [ image, setImage ] = useState(null);
     const [ post , setPost ] = useState("");
     const { palette } = useTheme();
+    const dispatch = useDispatch();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const isNonMobile = useMediaQuery("(min-width:1000px)");
@@ -46,26 +46,19 @@ const MyPostWidget = ({ picturePath }) => {
             formData.append("picturePath", image.name);
         }
 
-        try {
-            const response = await fetch("http://localhost:3001/posts", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
+        const response = await fetch("http://localhost:3001/posts", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
 
-            if (response.status === 201) {
-                const posts = await response.json();
-                dispatch(setPosts(posts));
-                setPost("");
-                setImage(null);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        const posts = await response.json();
+        dispatch(setPosts({ posts: posts }));
+        setPost("");
+        setImage(null);
     }
-
 
     return (
         <WidgetWrapper>
@@ -122,11 +115,11 @@ const MyPostWidget = ({ picturePath }) => {
                                 )}
                             </Box>
                                 {image && (
-                                    <iconButton
+                                    <IconButton
                                         onClick={() => setImage(null)}
                                         sx={{ width:"25%"}}>
                                         <DeleteOutlined />
-                                    </iconButton>
+                                    </IconButton>
                                 )}
                             </FlexBetween>
                         )}

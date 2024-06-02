@@ -255,7 +255,7 @@ const Form = () => {
                             backgroundColor: palette.primary.main,
                             color: palette.background.alt,
                             "&:hover": {
-                                backgroundColor: palette.primary.main,
+                                backgroundColor: palette.neutral.medium,
                             }
                         }}
                         >
@@ -272,7 +272,7 @@ const Form = () => {
                                 color: palette.primary.main,
                                 "&:hover": {
                                     cursor: "pointer",
-                                    color: palette.primary.light,
+                                    color: palette.neutral.medium,
                                 }
                             }}
                             >
