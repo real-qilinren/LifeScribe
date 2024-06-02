@@ -1,14 +1,17 @@
+import React from "react";
+import { Box, useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
 import Navbar from "../navbar";
-import {Box, useMediaQuery} from "@mui/material";
-import {useSelector} from "react-redux";
 import UserWidget from "../widgets/UserWidget";
 import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import AdvertWidget from "../widgets/AdvertWidget";
+import ChatWidget from "../widgets/ChatWidget";
 
 const HomePage = () => {
     const isNonMobile = useMediaQuery("(min-width:1000px)");
     const { _id, picturePath } = useSelector((state) => state.user);
+    console.log(_id);
 
     return (
         <Box>
@@ -33,8 +36,10 @@ const HomePage = () => {
                 {isNonMobile && (
                     <Box flexBasis="26%">
                         <AdvertWidget />
+                        <Box m="2rem 0" />
                     </Box>
                 )}
+                <ChatWidget />
             </Box>
         </Box>
     );

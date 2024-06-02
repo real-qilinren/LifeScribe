@@ -1,11 +1,15 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     mode: "light",
     user: null,
     token: null,
     posts: [],
-}
+    chatFriendId: null,
+    chatFriendName: "",
+    chatFriendPicturePath: "",
+    chatId: null
+};
 
 export const authSlice = createSlice({
     name: "auth",
@@ -29,6 +33,14 @@ export const authSlice = createSlice({
                 console.error("User friends not exist");
             }
         },
+        setChatFriendInfo: (state, action) => {
+            state.chatFriendId = action.payload.chatFriendId;
+            state.chatFriendName = action.payload.chatFriendName;
+            state.chatFriendPicturePath = action.payload.chatFriendPicturePath;
+        },
+        setChatId: (state, action) => {
+            state.chatId = action.payload.chatId;
+        },
         setPosts: (state, action) => {
             state.posts = action.payload.posts;
         },
@@ -40,9 +52,9 @@ export const authSlice = createSlice({
                 return post;
             });
         },
-
     }
 });
 
-export const {setMode, setLogin, setLogout, setFriends, setPosts, setPost} = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setChatFriendInfo, setChatId, setPosts, setPost } = authSlice.actions;
+
 export default authSlice.reducer;

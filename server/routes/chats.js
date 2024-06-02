@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/:id/chats", verifyToken, getChats);
 
 /* UPDATE */
-router.post("/:id/chat", verifyToken, createChat);
+router.post("/chat", verifyToken, createChat);
 router.delete("/:id/delete", verifyToken, deleteChat);
 
 export default router;

@@ -1,5 +1,5 @@
 import {
-    Box,
+    Box, Typography,
     useMediaQuery,
 
 } from '@mui/material';
@@ -48,7 +48,7 @@ const ProfilePage = () => {
                     <Box m="2rem 0" />
                 </Box>
                 <Box
-                    flexBasis={isNonMobile ? "42%" : undefined}
+                    flexBasis={isNonMobile ? "54%" : undefined}
                     mt={isNonMobile ? undefined : "2rem"}
                 >
                     <Box m="2rem 0" />

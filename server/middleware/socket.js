@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { handleMessageCreation } from '../controllers/handleMessageCreation.js';
+import { handleMessageCreation } from '../controllers/messages.js';
 
 export const configureSocket = (server) => {
     const io = new Server(server, {

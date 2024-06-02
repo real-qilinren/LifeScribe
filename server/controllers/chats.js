@@ -29,8 +29,7 @@ export const createChat = async (req, res) => {
             await chat.save();
         }
 
-        const chats = await Chat.find().sort({ updatedAt: -1 });
-        res.status(201).json(chats);
+        res.status(201).json(chat);
 
     } catch (error) {
         res.status(409).json({ message: error.message });
