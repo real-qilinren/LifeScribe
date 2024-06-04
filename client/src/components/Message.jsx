@@ -7,7 +7,6 @@ const Message = ({ message, isOwnMessage }) => {
     const backgroundColor = isOwnMessage ? palette.primary.main : palette.neutral.light;
     const color = isOwnMessage ? palette.background.alt : palette.neutral.dark;
 
-
     return (
         <Box
             sx={{

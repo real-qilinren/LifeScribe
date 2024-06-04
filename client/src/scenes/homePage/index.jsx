@@ -38,7 +38,7 @@ const HomePage = () => {
                         <Box m="2rem 0" />
                     </Box>
                 )}
-                {/*<ChatWidget />*/}
+                <ChatWidget />
             </Box>
         </Box>
     );

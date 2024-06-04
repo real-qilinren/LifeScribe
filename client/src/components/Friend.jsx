@@ -1,7 +1,7 @@
 import { Chat as ChatIcon, PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {setChatFriendInfo, setChatId, setFriends} from "../state";
+import { setFriends } from "../state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import { useNavigate } from "react-router-dom";
@@ -35,27 +35,27 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
         dispatch(setFriends({ friends: data }));
     };
 
-    const createChat = async () => {
-        const response = await fetch(`http://localhost:3001/chats/chat`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ user1Id: _id, user2Id: friendId })
-        });
-
-        const chat = await response.json();
-        dispatch(setChatId({ chatId: chat._id }));
-    };
+    // const createChat = async () => {
+    //     const response = await fetch(`http://localhost:3001/chats/chat`, {
+    //         method: "POST",
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({ user1Id: _id, user2Id: friendId })
+    //     });
+    //
+    //     const chat = await response.json();
+    //     dispatch(setChatId({ chatId: chat._id }));
+    // };
 
     const handleChatClick = async () => {
-        createChat();
-        dispatch(setChatFriendInfo({
-            chatFriendId: friendId,
-            chatFriendName: name,
-            chatFriendPicturePath: userPicturePath
-        }));
+        // createChat();
+        // dispatch(setChatFriendInfo({
+        //     chatFriendId: friendId,
+        //     chatFriendName: name,
+        //     chatFriendPicturePath: userPicturePath
+        // }));
     };
 
     return (

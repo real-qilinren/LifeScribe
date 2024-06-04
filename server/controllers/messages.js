@@ -32,6 +32,7 @@ export const sendMessage = async (req, res) => {
     }
 }
 
+
 // Helper function to create a new message and add it to the chat
 export const handleMessageCreation = async ({ chatId, senderId, text }) => {
     const message = new Message({

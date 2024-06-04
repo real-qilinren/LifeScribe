@@ -5,11 +5,6 @@ const initialState = {
     user: null,
     token: null,
     posts: [],
-    chatFriendId: null,
-    chatFriendName: "",
-    chatFriendPicturePath: "",
-    chatId: null,
-    messages: []
 };
 
 export const authSlice = createSlice({
@@ -34,19 +29,8 @@ export const authSlice = createSlice({
                 console.error("User friends not exist");
             }
         },
-        setChatFriendInfo: (state, action) => {
-            state.chatFriendId = action.payload.chatFriendId;
-            state.chatFriendName = action.payload.chatFriendName;
-            state.chatFriendPicturePath = action.payload.chatFriendPicturePath;
-        },
-        setChatId: (state, action) => {
-            state.chatId = action.payload.chatId;
-        },
         setPosts: (state, action) => {
             state.posts = action.payload.posts;
-        },
-        setMessages: (state, action) => {
-            state.messages = action.payload.messages;
         },
         setPost: (state, action) => {
             state.posts = state.posts.map((post) => {
@@ -59,6 +43,6 @@ export const authSlice = createSlice({
     }
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setChatFriendInfo, setChatId, setPosts, setMessages, setPost } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends , setPosts, setMessages, setPost } = authSlice.actions;
 
 export default authSlice.reducer;
