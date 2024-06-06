@@ -3,7 +3,13 @@ import Chat from '../models/Chat.js';
 /* READ */
 export const getChats = async (req, res) => {
     try {
-        const chats = await Chat.find().sort({ updatedAt: -1 });
+        const userId = req.user.id;
+        const chats = await Chat.find({
+            $or: [
+                { user1Id: userId },
+                { user2Id: userId }
+            ]
+        }).sort({ updatedAt: -1 });
         res.status(200).json(chats);
     } catch (error) {
         res.status(404).json({ message: error.message });
