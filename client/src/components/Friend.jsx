@@ -1,7 +1,7 @@
 import { Chat as ChatIcon, PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {setChatFriendInfo, setChatId, setFriends} from "../state";
+import { setFriends } from "../state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import { useNavigate } from "react-router-dom";
@@ -10,9 +10,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = useSelector(state => state.token);
-    const { _id } = useSelector(state => state.user);
+    const user = useSelector(state => state.user);
+    const _id = user._id;
+    const loggedInUserName = `${user.firstName} ${user.lastName}`;
+    const loggedInUserPicturePath = user.picturePath;
     const friends = useSelector(state => state.user.friends);
-
     const { palette } = useTheme();
     const primaryLight = palette.primary.light;
     const primaryDark = palette.primary.dark;
@@ -42,20 +44,19 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ user1Id: _id, user2Id: friendId })
+            body: JSON.stringify({
+                user1Id: _id,
+                user2Id: friendId,
+                user1Name: loggedInUserName,
+                user2Name: name,
+                user1PicturePath: loggedInUserPicturePath,
+                user2PicturePath: userPicturePath
+            })
         });
-
-        const chat = await response.json();
-        dispatch(setChatId({ chatId: chat._id }));
     };
 
     const handleChatClick = async () => {
         createChat();
-        dispatch(setChatFriendInfo({
-            chatFriendId: friendId,
-            chatFriendName: name,
-            chatFriendPicturePath: userPicturePath
-        }));
     };
 
     return (

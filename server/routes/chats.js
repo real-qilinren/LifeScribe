@@ -5,7 +5,7 @@ import {createChat, deleteChat, getChats} from "../controllers/chats.js";
 const router = express.Router();
 
 /* READ */
-router.get("/:id/chats", verifyToken, getChats);
+router.get("/", verifyToken, getChats);
 
 /* UPDATE */
 router.post("/chat", verifyToken, createChat);

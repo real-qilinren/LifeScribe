@@ -32,6 +32,7 @@ export const sendMessage = async (req, res) => {
     }
 }
 
+
 // Helper function to create a new message and add it to the chat
 export const handleMessageCreation = async ({ chatId, senderId, text }) => {
     const message = new Message({
@@ -44,6 +45,10 @@ export const handleMessageCreation = async ({ chatId, senderId, text }) => {
     // Add the message to the chat to update the db
     const chat = await Chat.findById(chatId);
     chat.messages.push(message._id);
+
+    // Update the lastMessage field
+    chat.lastMessage = message.text;
+
     await chat.save();
 
     return message;

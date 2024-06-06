@@ -20,6 +20,7 @@ export const configureSocket = (server) => {
             try {
                 const message = await handleMessageCreation({ chatId, senderId, text });
                 io.to(chatId).emit('receiveMessage', message);
+                console.log('Message sent:', message);
             } catch (error) {
                 console.error('Error sending message:', error);
             }

@@ -3,7 +3,13 @@ import Chat from '../models/Chat.js';
 /* READ */
 export const getChats = async (req, res) => {
     try {
-        const chats = await Chat.find().sort({ updatedAt: -1 });
+        const userId = req.user.id;
+        const chats = await Chat.find({
+            $or: [
+                { user1Id: userId },
+                { user2Id: userId }
+            ]
+        }).sort({ updatedAt: -1 });
         res.status(200).json(chats);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -13,7 +19,14 @@ export const getChats = async (req, res) => {
 /* CREATE */
 export const createChat = async (req, res) => {
     try {
-        const { user1Id, user2Id } = req.body;
+        const {
+            user1Id,
+            user2Id,
+            user1Name,
+            user2Name,
+            user1PicturePath,
+            user2PicturePath,
+        } = req.body;
 
         // Check if the chat already exists
         let chat = await Chat.findOne({
@@ -25,7 +38,14 @@ export const createChat = async (req, res) => {
 
         // If the chat doesn't exist, create a new one
         if (!chat) {
-            chat = new Chat({ user1Id, user2Id });
+            chat = new Chat({
+                user1Id,
+                user2Id,
+                user1Name,
+                user2Name,
+                user1PicturePath,
+                user2PicturePath,
+            });
             await chat.save();
         }
 
