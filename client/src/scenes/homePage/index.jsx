@@ -7,6 +7,8 @@ import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import AdvertWidget from "../widgets/AdvertWidget";
 import ChatWidget from "../widgets/ChatWidget";
+import ChatListWidget from "../widgets/ChatListWidget";
+import ChatWindow from "../chatWindow";
 
 const HomePage = () => {
     const isNonMobile = useMediaQuery("(min-width:1000px)");
@@ -38,8 +40,8 @@ const HomePage = () => {
                         <Box m="2rem 0" />
                     </Box>
                 )}
-                <ChatWidget />
             </Box>
+            <ChatWindow />
         </Box>
     );
 }

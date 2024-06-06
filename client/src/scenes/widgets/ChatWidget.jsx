@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, IconButton, InputBase, useTheme } from "@mui/material";
-import { Send } from "@mui/icons-material";
+import {Close, Send} from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
 import Message from "components/Message";
 import socket from "../../socket/index";
 
-const ChatWidget = () => {
-    const testChatId = "665e5b76d286497554ff20bf";
+const ChatWidget = ({chatId, onClose, chatName}) => {
     const token = useSelector((state) => state.token);
     const { _id } = useSelector((state) => state.user);
     const { palette } = useTheme();
@@ -18,7 +17,7 @@ const ChatWidget = () => {
     useEffect(() => {
         fetchMessages();
         socket.connect();
-        socket.emit('joinChat', testChatId);
+        socket.emit('joinChat', chatId);
 
         socket.on('receiveMessage', (newMessage) => {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -26,12 +25,12 @@ const ChatWidget = () => {
 
         return () => {
             socket.off('receiveMessage');
-            socket.emit('leaveChat', testChatId);
+            socket.emit('leaveChat', chatId);
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchMessages = async () => {
-        const response = await fetch(`http://localhost:3001/messages/${testChatId}`, {
+        const response = await fetch(`http://localhost:3001/messages/${chatId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -45,7 +44,7 @@ const ChatWidget = () => {
 
     const handleSubmit = () => {
         if (message.trim() !== "") {
-            const newMessage = { chatId: testChatId, senderId: _id, text: message };
+            const newMessage = { chatId: chatId, senderId: _id, text: message };
             socket.emit('sendMessage', newMessage);
             setMessage("");
         }
@@ -55,7 +54,7 @@ const ChatWidget = () => {
         <WidgetWrapper sx={{
             position: 'fixed',
             bottom: '1rem',
-            right: '1rem',
+            right: '22rem',
             width: '22rem',
             height: '28rem',
             overflow: 'hidden',
@@ -64,7 +63,10 @@ const ChatWidget = () => {
         }}>
             <Box display="flex" flexDirection="column" height="100%">
                 <FlexBetween sx={{ padding: '0.5rem 1rem' }}>
-                    <Typography variant="subtitle2">TESTING CHAT FUNCTION</Typography>
+                    <Typography variant="subtitle2">{chatName}</Typography>
+                    <IconButton onClick={onClose}>
+                        <Close />
+                    </IconButton>
                 </FlexBetween>
                 <Box
                     flexGrow={1}

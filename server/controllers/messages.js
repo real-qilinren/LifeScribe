@@ -45,6 +45,10 @@ export const handleMessageCreation = async ({ chatId, senderId, text }) => {
     // Add the message to the chat to update the db
     const chat = await Chat.findById(chatId);
     chat.messages.push(message._id);
+
+    // Update the lastMessage field
+    chat.lastMessage = message.text;
+
     await chat.save();
 
     return message;
