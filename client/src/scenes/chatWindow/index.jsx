@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import ChatListWidget from "../widgets/ChatListWidget";
 import ChatWidget from "../widgets/ChatWidget";
 
 const ChatWindow = () => {
     const [selectedChatId, setSelectedChatId] = useState(null);
     const [chatName, setChatName] = useState(null);
+    const isNonMobile = useMediaQuery("(min-width:1000px)");
 
     const handleChatSelect = (chatId, chatName) => {
         setChatName(chatName);
@@ -23,6 +24,7 @@ const ChatWindow = () => {
                 bottom: '1rem',
                 right: '1rem',
                 display: 'flex',
+                flexDirection: isNonMobile ? 'row' : 'column',
                 alignItems: 'flex-end',
                 zIndex: 1000,
             }}

@@ -10,9 +10,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = useSelector(state => state.token);
-    const { _id } = useSelector(state => state.user);
+    const user = useSelector(state => state.user);
+    const _id = user._id;
+    const loggedInUserName = `${user.firstName} ${user.lastName}`;
+    const loggedInUserPicturePath = user.picturePath;
     const friends = useSelector(state => state.user.friends);
-
     const { palette } = useTheme();
     const primaryLight = palette.primary.light;
     const primaryDark = palette.primary.dark;
@@ -35,27 +37,26 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, isProfile = false }
         dispatch(setFriends({ friends: data }));
     };
 
-    // const createChat = async () => {
-    //     const response = await fetch(`http://localhost:3001/chats/chat`, {
-    //         method: "POST",
-    //         headers: {
-    //             Authorization: `Bearer ${token}`,
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify({ user1Id: _id, user2Id: friendId })
-    //     });
-    //
-    //     const chat = await response.json();
-    //     dispatch(setChatId({ chatId: chat._id }));
-    // };
+    const createChat = async () => {
+        const response = await fetch(`http://localhost:3001/chats/chat`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user1Id: _id,
+                user2Id: friendId,
+                user1Name: loggedInUserName,
+                user2Name: name,
+                user1PicturePath: loggedInUserPicturePath,
+                user2PicturePath: userPicturePath
+            })
+        });
+    };
 
     const handleChatClick = async () => {
-        // createChat();
-        // dispatch(setChatFriendInfo({
-        //     chatFriendId: friendId,
-        //     chatFriendName: name,
-        //     chatFriendPicturePath: userPicturePath
-        // }));
+        createChat();
     };
 
     return (

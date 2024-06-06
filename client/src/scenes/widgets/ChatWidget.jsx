@@ -1,33 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, IconButton, InputBase, useTheme } from "@mui/material";
-import {Close, Send} from "@mui/icons-material";
+import { Box, Typography, IconButton, InputBase, useTheme, useMediaQuery } from "@mui/material";
+import { Close, Send } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import WidgetWrapper from "components/WidgetWrapper";
 import FlexBetween from "components/FlexBetween";
 import Message from "components/Message";
 import socket from "../../socket/index";
 
-const ChatWidget = ({chatId, onClose, chatName}) => {
+const ChatWidget = ({ chatId, onClose, chatName }) => {
     const token = useSelector((state) => state.token);
     const { _id } = useSelector((state) => state.user);
     const { palette } = useTheme();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
+    const isNonMobile = useMediaQuery("(min-width:1000px)");
 
     useEffect(() => {
-        fetchMessages();
-        socket.connect();
-        socket.emit('joinChat', chatId);
+        if (chatId) {
+            fetchMessages();
+            socket.connect();
+            socket.emit('joinChat', chatId);
 
-        socket.on('receiveMessage', (newMessage) => {
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-        });
+            socket.on('receiveMessage', (newMessage) => {
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+            });
 
-        return () => {
-            socket.off('receiveMessage');
-            socket.emit('leaveChat', chatId);
-        };
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+            return () => {
+                socket.off('receiveMessage');
+                socket.emit('leaveChat', chatId);
+            };
+        }
+    }, [chatId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchMessages = async () => {
         const response = await fetch(`http://localhost:3001/messages/${chatId}`, {
@@ -54,12 +57,13 @@ const ChatWidget = ({chatId, onClose, chatName}) => {
         <WidgetWrapper sx={{
             position: 'fixed',
             bottom: '1rem',
-            right: '22rem',
-            width: '22rem',
-            height: '28rem',
+            right: isNonMobile ? '22rem' : '1rem',
+            width: isNonMobile ? '22rem' : '80%',
+            height: isNonMobile ? '28rem' : '50%',
             overflow: 'hidden',
             boxShadow: '0 0.25rem 0.5rem rgba(0, 0, 0, 0.1)',
             borderRadius: '1rem',
+            zIndex: 1000
         }}>
             <Box display="flex" flexDirection="column" height="100%">
                 <FlexBetween sx={{ padding: '0.5rem 1rem' }}>

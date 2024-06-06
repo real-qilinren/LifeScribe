@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Typography, List } from "@mui/material";
+import { Typography, List, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import WidgetWrapper from "components/WidgetWrapper";
 import ChatItem from "components/ChatItem";
 
-const ChatListWidget = ({ onChatSelect }) => {
+const ChatListWidget = ({ onChatSelect, onUpdateLastMessage }) => {
     const token = useSelector((state) => state.token);
     const userId = useSelector((state) => state.user._id);
     const [chats, setChats] = useState([]);
+    const isNonMobile = useMediaQuery("(min-width:1000px)");
 
     useEffect(() => {
         fetchChats();
@@ -27,11 +28,15 @@ const ChatListWidget = ({ onChatSelect }) => {
     return (
         <WidgetWrapper
             sx={{
-                width: '20rem',
+                position: 'fixed',
+                bottom: '1rem',
+                right: '1rem',
+                width: isNonMobile ? '20rem' : '60%',
                 maxHeight: '80vh',
                 overflowY: 'auto',
                 boxShadow: '0 0.25rem 0.5rem rgba(0, 0, 0, 0.1)',
                 borderRadius: '1rem',
+                zIndex: 1000
             }}
         >
             <Typography variant="h6" sx={{ padding: "1rem" }}>
