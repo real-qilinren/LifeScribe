@@ -1,0 +1,24 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    build:
+      context: ./server
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=development
+      - MONGO_URL=${MONGO_URL}
+      - PORT=3001
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'

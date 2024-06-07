@@ -83,3 +83,5 @@ mongoose
         //     .catch((error) => console.log("Error inserting posts:", error.message));
     })
     .catch((error) => console.log(error.message));
+
+export default app;
