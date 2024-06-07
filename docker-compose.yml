@@ -13,10 +13,10 @@ services:
       context: ./server
     ports:
       - '3001:3001'
+    env_file:
+      - .env
     environment:
       - NODE_ENV=development
-      - MONGO_URL=${MONGO_URL}
-      - PORT=3001
 
   mongo:
     image: mongo:latest
