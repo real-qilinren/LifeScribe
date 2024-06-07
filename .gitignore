@@ -1,2 +1,26 @@
-.idea
-/node_modules
+# Environment variables
+.env
+
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Ignore Docker intermediate containers
+**/intermediate/
+**/layers/
+**/cache/
