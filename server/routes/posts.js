@@ -6,6 +6,7 @@ import {
     likePost,
 } from "../controllers/posts.js";
 import { verifyToken } from "../middleware/auth.js";
+import multer from "multer";
 
 const router = express.Router();
 

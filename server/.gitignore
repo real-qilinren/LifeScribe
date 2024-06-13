@@ -24,3 +24,7 @@ Thumbs.db
 **/intermediate/
 **/layers/
 **/cache/
+
+# Ignore API key files
+services/google-nlp-api.json
+services/google-vision-api.json
