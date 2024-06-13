@@ -19,16 +19,16 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import { useState } from "react";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import Dropzone from "react-dropzone";
-import {setPosts} from "../../state";
+import { setPosts } from "../../state";
 
 const MyPostWidget = ({ picturePath }) => {
-    const [ isClickImage, setClickImage ] = useState(false);
-    const [ image, setImage ] = useState(null);
-    const [ post , setPost ] = useState("");
+    const [isClickImage, setClickImage] = useState(false);
+    const [image, setImage] = useState(null);
+    const [post, setPost] = useState("");
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const { _id } = useSelector((state) => state.user);
@@ -46,19 +46,58 @@ const MyPostWidget = ({ picturePath }) => {
             formData.append("picturePath", image.name);
         }
 
-        const response = await fetch("http://localhost:3001/posts", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
+        console.log("TEST1 image", image);
 
-        const posts = await response.json();
-        dispatch(setPosts({ posts: posts }));
-        setPost("");
-        setImage(null);
-    }
+        try {
+            const response = await fetch("http://localhost:3001/posts", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to post");
+            }
+
+            const posts = await response.json();
+            dispatch(setPosts({ posts }));
+            setPost("");
+            setImage(null);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleGenerateDescription = async () => {
+        if (image) {
+            console.log("TEST2", image);
+            const formData = new FormData();
+            formData.append("picture", image);
+
+            try {
+                const response = await fetch("http://localhost:3001/posts/description", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to generate description");
+                }
+
+                const data = await response.json();
+                setPost(data.description);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            console.error("No image selected.");
+        }
+    };
 
     return (
         <WidgetWrapper>
@@ -72,7 +111,7 @@ const MyPostWidget = ({ picturePath }) => {
                         width: "100%",
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
-                        backgroundColor: palette.neutral.light
+                        backgroundColor: palette.neutral.light,
                     }}
                 />
             </FlexBetween>
@@ -82,66 +121,80 @@ const MyPostWidget = ({ picturePath }) => {
                     borderRadius="5px"
                     mt="1rem"
                     p="1rem"
-                    >
-
+                >
                     <Dropzone
-                        acceptFiles=".jpg, .jpeg, .png"
+                        accept="image/*"
                         multiple={false}
-                        onDrop={(acceptedFiles) =>
-                            setImage(acceptedFiles[0])
-                        }
+                        onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                     >
-                        {({getRootProps, getInputProps}) => (
+                        {({ getRootProps, getInputProps }) => (
                             <FlexBetween>
-                            <Box
-                                {...getRootProps()}
-                                border={`2px dashed ${palette.primary.main}`}
-                                p="1rem"
-                                width="100%"
-                                sx={{
-                                    "&:hover": {
-                                        cursor: "pointer"
-                                    }
-                                }}
+                                <Box
+                                    {...getRootProps()}
+                                    border={`2px dashed ${palette.primary.main}`}
+                                    p="1rem"
+                                    width="100%"
+                                    sx={{
+                                        "&:hover": {
+                                            cursor: "pointer",
+                                        },
+                                    }}
                                 >
-                                <input {...getInputProps()} />
-                                {!image ? (
-                                    <p>Add Image Here</p>
-                                ) : (
-                                    <FlexBetween>
-                                        <Typography>{image.name}</Typography>
-                                        <EditOutlined/>
-                                    </FlexBetween>
-                                )}
-                            </Box>
+                                    <input {...getInputProps()} />
+                                    {!image ? (
+                                        <p>Add Image Here</p>
+                                    ) : (
+                                        <FlexBetween>
+                                            <Typography>{image.name}</Typography>
+                                            <EditOutlined />
+                                        </FlexBetween>
+                                    )}
+                                </Box>
                                 {image && (
                                     <IconButton
                                         onClick={() => setImage(null)}
-                                        sx={{ width:"25%"}}>
+                                        sx={{ width: "25%" }}
+                                    >
                                         <DeleteOutlined />
                                     </IconButton>
                                 )}
                             </FlexBetween>
                         )}
                     </Dropzone>
+
+                    {image && (
+                        <Button
+                            onClick={handleGenerateDescription}
+                            sx={{
+                                marginTop: "1rem",
+                                color: palette.background.alt,
+                                backgroundColor: palette.primary.main,
+                                borderRadius: "3rem",
+                            }}
+                        >
+                            Generate Description
+                        </Button>
+                    )}
                 </Box>
             )}
 
-            <Divider sx={{ margin: "1.25rem 0 "}}/>
+            <Divider sx={{ margin: "1.25rem 0 " }} />
 
             <FlexBetween>
                 <FlexBetween
                     gap="0.25rem"
-                    onClick={() => setClickImage(!isClickImage)}>
-                    <ImageOutlined sx={{ color: mediumMain }}/>
+                    onClick={() => setClickImage(!isClickImage)}
+                >
+                    <ImageOutlined sx={{ color: mediumMain }} />
                     <Typography
                         color={mediumMain}
                         sx={{
                             "&:hover": {
                                 cursor: "pointer",
-                                color: medium
-                            }
-                    }}>
+                                color: medium,
+                            },
+                        }}
+                    >
                         Image
                     </Typography>
                 </FlexBetween>
@@ -149,31 +202,46 @@ const MyPostWidget = ({ picturePath }) => {
                 {isNonMobile ? (
                     <>
                         <FlexBetween gap="0.25rem">
-                            <GifBoxOutlined sx={{ color: mediumMain }}/>
-                            <Typography color={mediumMain} sx={{"&:hover": { cursor: "pointer", color: medium }}}>
+                            <GifBoxOutlined sx={{ color: mediumMain }} />
+                            <Typography
+                                color={mediumMain}
+                                sx={{
+                                    "&:hover": { cursor: "pointer", color: medium },
+                                }}
+                            >
                                 Clip
                             </Typography>
                         </FlexBetween>
 
                         <FlexBetween gap="0.25rem">
-                            <AttachFileOutlined sx={{ color: mediumMain }}/>
-                            <Typography color={mediumMain} sx={{"&:hover": { cursor: "pointer", color: medium }}}>
+                            <AttachFileOutlined sx={{ color: mediumMain }} />
+                            <Typography
+                                color={mediumMain}
+                                sx={{
+                                    "&:hover": { cursor: "pointer", color: medium },
+                                }}
+                            >
                                 Attachment
                             </Typography>
                         </FlexBetween>
 
                         <FlexBetween gap="0.25rem">
-                            <MicOutlined sx={{ color: mediumMain }}/>
-                            <Typography color={mediumMain} sx={{"&:hover": { cursor: "pointer", color: medium }}}>
+                            <MicOutlined sx={{ color: mediumMain }} />
+                            <Typography
+                                color={mediumMain}
+                                sx={{
+                                    "&:hover": { cursor: "pointer", color: medium },
+                                }}
+                            >
                                 Audio
                             </Typography>
                         </FlexBetween>
                     </>
-                ) : (<FlexBetween gap={"0.25rem"}>
-                        <MoreHorizOutlined sx={{ color: mediumMain }}/>
+                ) : (
+                    <FlexBetween gap={"0.25rem"}>
+                        <MoreHorizOutlined sx={{ color: mediumMain }} />
                     </FlexBetween>
-                    )
-                }
+                )}
 
                 <Button
                     disabled={!post}
@@ -182,13 +250,13 @@ const MyPostWidget = ({ picturePath }) => {
                         color: palette.background.alt,
                         backgroundColor: palette.primary.main,
                         borderRadius: "3rem",
-                    }}>
+                    }}
+                >
                     Post
                 </Button>
             </FlexBetween>
-
         </WidgetWrapper>
-    )
-}
+    );
+};
 
 export default MyPostWidget;
