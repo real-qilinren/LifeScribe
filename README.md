@@ -1,4 +1,4 @@
-# ProjectX
+# LifeScribe
 
 ## Overview
 
