@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a personal side project that I and [@Zhenke](https://github.com/zhxu7000) developed mainly following the [Youtube tutorial](https://www.youtube.com/watch?v=K8YELRmUb5o&list=LL&index=15&t=10318s). The project is built using the MERN stack (MongoDB, Express.js, React, Node.js) and showcases responsive design and modern web development practices. The primary objective of this project is to deepen my understanding of full-stack web development and to experiment with Docker workflows.
+This is a personal side project that I and [@Zhenke](https://github.com/zhxu7000) developed. The project is built using the MERN stack (MongoDB, Express.js, React, Node.js) and showcases responsive design and modern web development practices. The primary objective of this project is to deepen my understanding of full-stack web development and to experiment with Docker workflows.
 
 ## Project Highlights
 
