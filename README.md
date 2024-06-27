@@ -116,7 +116,3 @@ The pipeline is triggered on pull requests to the master branch and performs the
 2. **Check Out Code:** The latest code is checked out from the repository.
 3. **Set Up Docker Buildx:** Docker Buildx is set up for building images.
 4. **Build Docker Images:** Docker images are built using the `docker-compose.yml` file.
-
-## Acknowledgments
-
-- Special thanks to [EdRoh](https://www.youtube.com/@EdRohDev) for the comprehensive tutorial series.
